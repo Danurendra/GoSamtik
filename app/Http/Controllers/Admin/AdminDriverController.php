@@ -46,7 +46,7 @@ class AdminDriverController extends Controller
             'offline' => Driver::where('availability_status', 'offline')->count(),
         ];
 
-        return view('admin. drivers.index', compact('drivers', 'stats'));
+        return view('admin.drivers.index', compact('drivers', 'stats'));
     }
 
     /**
@@ -160,7 +160,7 @@ class AdminDriverController extends Controller
     public function edit(Driver $driver)
     {
         $driver->load('user');
-        return view('admin.drivers. edit', compact('driver'));
+        return view('admin.drivers.edit', compact('driver'));
     }
 
     /**

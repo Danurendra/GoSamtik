@@ -130,7 +130,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/customers/{user}/status', [AdminCustomerController:: class, 'updateStatus'])->name('customers.status');
 
         // Drivers Management
-        Route:: get('/drivers', [AdminDriverController::class, 'index'])->name('drivers. index');
+        Route:: get('/drivers', [AdminDriverController::class, 'index'])->name('drivers.index');
         Route::get('/drivers/create', [AdminDriverController::class, 'create'])->name('drivers.create');
         Route::post('/drivers', [AdminDriverController::class, 'store'])->name('drivers.store');
         Route::get('/drivers/{driver}', [AdminDriverController::class, 'show'])->name('drivers.show');

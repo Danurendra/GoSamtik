@@ -15,7 +15,7 @@ class AdminSettingController extends Controller
     {
         $settings = Setting::all()->groupBy('group');
 
-        return view('admin.settings. index', compact('settings'));
+        return view('admin.settings.index', compact('settings'));
     }
 
     /**

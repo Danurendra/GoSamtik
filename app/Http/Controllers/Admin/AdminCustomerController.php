@@ -48,7 +48,7 @@ class AdminCustomerController extends Controller
                 ->count(),
         ];
 
-        return view('admin. customers.index', compact('customers', 'stats'));
+        return view('admin.customers.index', compact('customers', 'stats'));
     }
 
     /**
@@ -83,7 +83,7 @@ class AdminCustomerController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('admin. customers.show', compact('user', 'stats', 'recentCollections', 'subscriptions'));
+        return view('admin.customers.show', compact('user', 'stats', 'recentCollections', 'subscriptions'));
     }
 
     /**

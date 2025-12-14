@@ -72,7 +72,7 @@ class CollectionController extends Controller
 
         $collection->load(['serviceType', 'driver.user', 'rating', 'payment']);
 
-        return view('collections. show', compact('collection'));
+        return view('collections.show', compact('collection'));
     }
 
     public function cancel(Request $request, Collection $collection)
@@ -94,7 +94,7 @@ class CollectionController extends Controller
 
         // TODO: Process refund if payment was made
 
-        return redirect()->route('collections. index')
+        return redirect()->route('collections.index')
             ->with('success', 'Collection cancelled successfully.');
     }
 

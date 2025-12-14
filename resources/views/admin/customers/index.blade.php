@@ -113,7 +113,7 @@
                                             <span class="text-sm text-gray-500">{{ $customer->created_at->format('M d, Y') }}</span>
                                         </td>
                                         <td class="py-4 text-right">
-                                            <a href="{{ route('admin.customers. show', $customer) }}" 
+                                            <a href="{{ route('admin.customers.show', $customer) }}" 
                                                class="text-eco-600 hover:text-eco-700 font-medium text-sm">
                                                 View
                                             </a>

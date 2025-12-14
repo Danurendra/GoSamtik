@@ -147,10 +147,10 @@
 
                             <!-- Actions -->
                             <div class="flex space-x-2">
-                                <a href="{{ route('admin.drivers. show', $driver) }}" class="flex-1">
+                                <a href="{{ route('admin.drivers.show', $driver) }}" class="flex-1">
                                     <x-button variant="secondary" class="w-full" size="sm">View</x-button>
                                 </a>
-                                <a href="{{ route('admin.drivers. edit', $driver) }}" class="flex-1">
+                                <a href="{{ route('admin.drivers.edit', $driver) }}" class="flex-1">
                                     <x-button variant="outline" class="w-full" size="sm">Edit</x-button>
                                 </a>
                             </div>
