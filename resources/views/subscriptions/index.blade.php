@@ -159,7 +159,7 @@
                                             <div>
                                                 <h3 class="font-medium text-gray-700">{{ $subscription->subscriptionPlan->name }}</h3>
                                                 <p class="text-sm text-gray-400">
-                                                    {{ ucfirst($subscription->status) }} on {{ $subscription->end_date? ->format('M d, Y') ??  $subscription->updated_at->format('M d, Y') }}
+                                                    {{ ucfirst($subscription->status) }} on {{ $subscription->end_date?->format('M d, Y') ??  $subscription->updated_at->format('M d, Y') }}
                                                 </p>
                                             </div>
                                         </div>

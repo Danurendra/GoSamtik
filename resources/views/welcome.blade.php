@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>EcoCollect - Professional Waste Collection Services</title>
+    <title>GO SAMTIK - Professional Waste Collection Services</title>
     <meta name="description" content="Professional waste collection services for your home and business.  Schedule pickups, track collections, and help save the environment.">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -19,7 +19,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                             </svg>
                         </div>
-                        <span class="text-xl font-bold text-gray-900">Eco<span class="text-eco-600">Collect</span></span>
+                        <span class="text-xl font-bold text-gray-900">GO<span class="text-eco-600">SAMTIK</span></span>
                     </a>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
@@ -163,14 +163,14 @@
 
                 @foreach($steps as $index => $step)
                     <div class="relative text-center">
-                        <div class="w-16 h-16 bg-eco-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white text-2xl font-bold shadow-eco">
+                        <div class="relative w-16 h-16 z-10 bg-eco-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white text-2xl font-bold shadow-eco">
                             {{ $step['step'] }}
                         </div>
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ $step['title'] }}</h3>
                         <p class="text-gray-600">{{ $step['description'] }}</p>
                         
                         @if($index < 3)
-                            <div class="hidden md:block absolute top-8 left-full w-full h-0.5 bg-eco-200 -translate-x-1/2"></div>
+                            <div class="hidden md:block absolute z-0 top-8 left-full w-full h-0.5 bg-eco-200 -translate-x-1/2 "></div>
                         @endif
                     </div>
                 @endforeach

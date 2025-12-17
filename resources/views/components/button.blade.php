@@ -23,6 +23,7 @@ $sizes = [
 $classes = $baseClasses . ' ' . $variants[$variant] . ' ' . $sizes[$size];
 @endphp
 
-<button type="{{ $type }}" {{ $attributes->merge(['class' => $classes]) }}>
+<button type="{{ $type }}" 
+    {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
 </button>
