@@ -29,6 +29,9 @@ export default {
                     900: '#14532d',
                     950: '#052e16',
                 },
+                boxShadow: {
+                    'eco': '0 4px 14px 0 rgba(34, 197, 94, 0.39)', // untuk class shadow-eco
+                },
                 'leaf': {
                     light: '#a7f3d0',
                     DEFAULT: '#34d399',
