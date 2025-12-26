@@ -1,303 +1,145 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center space-x-4">
-            <a href="{{ route('collections.index') }}" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </a>
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Schedule a Pickup</h1>
-                <p class="text-gray-500 mt-1">Request a one-time waste collection</p>
-            </div>
-        </div>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Buat Jadwal Penjemputan') }}
+        </h2>
     </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg: px-8">
-            <form method="POST" action="{{ route('collections.store') }}" x-data="collectionForm()">
-                @csrf
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
 
-                <!-- Step Indicator -->
-                <div class="flex items-center justify-center mb-8">
-                    <div class="flex items-center">
-                        <div class="flex items-center justify-center w-10 h-10 rounded-full" : class="step >= 1 ? 'bg-eco-600 text-white' : 'bg-gray-200 text-gray-600'">
-                            <span class="font-semibold">1</span>
-                        </div>
-                        <span class="ml-2 font-medium" :class="step >= 1 ? 'text-eco-600' : 'text-gray-400'">Service</span>
-                    </div>
-                    <div class="w-16 h-1 mx-4" :class="step >= 2 ? 'bg-eco-600' : 'bg-gray-200'"></div>
-                    <div class="flex items-center">
-                        <div class="flex items-center justify-center w-10 h-10 rounded-full" :class="step >= 2 ? 'bg-eco-600 text-white' : 'bg-gray-200 text-gray-600'">
-                            <span class="font-semibold">2</span>
-                        </div>
-                        <span class="ml-2 font-medium" :class="step >= 2 ? 'text-eco-600' : 'text-gray-400'">Schedule</span>
-                    </div>
-                    <div class="w-16 h-1 mx-4" :class="step >= 3 ? 'bg-eco-600' : 'bg-gray-200'"></div>
-                    <div class="flex items-center">
-                        <div class="flex items-center justify-center w-10 h-10 rounded-full" : class="step >= 3 ?  'bg-eco-600 text-white' : 'bg-gray-200 text-gray-600'">
-                            <span class="font-semibold">3</span>
-                        </div>
-                        <span class="ml-2 font-medium" :class="step >= 3 ? 'text-eco-600' : 'text-gray-400'">Confirm</span>
-                    </div>
-                </div>
+                    <form action="{{ route('collections.store') }}" method="POST" class="space-y-8">
+                        @csrf
 
-                <!-- Step 1: Select Service Type -->
-                <div x-show="step === 1" x-transition>
-                    <x-card>
-                        <h2 class="text-lg font-semibold text-gray-900 mb-6">Select Waste Type</h2>
-                        
-                        <div class="grid grid-cols-1 md: grid-cols-2 gap-4">
-                            @foreach($serviceTypes as $type)
-                                <label class="relative cursor-pointer">
-                                    <input type="radio" name="service_type_id" value="{{ $type->id }}" 
-                                           x-model="serviceTypeId" 
-                                           @change="selectServiceType({{ $type->toJson() }})"
-                                           class="peer sr-only" required>
-                                    <div class="p-4 border-2 border-gray-200 rounded-xl peer-checked:border-eco-500 peer-checked:bg-eco-50 hover:border-eco-300 transition-all">
-                                        <div class="flex items-start space-x-4">
-                                            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: {{ $type->color }}20">
-                                                <svg class="w-6 h-6" style="color: {{ $type->color }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
-                                                </svg>
-                                            </div>
-                                            <div class="flex-1">
-                                                <h3 class="font-semibold text-gray-900">{{ $type->name }}</h3>
-                                                <p class="text-sm text-gray-500 mt-1">{{ $type->description }}</p>
-                                                <p class="text-lg font-bold text-eco-600 mt-2">${{ number_format($type->base_price, 2) }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="absolute top-4 right-4 hidden peer-checked:block">
-                                            <svg class="w-6 h-6 text-eco-600" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </div>
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">1. Seberapa banyak sampahmu?</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                                <label class="cursor-pointer relative">
+                                    <input type="radio" name="waste_size" value="small" class="peer sr-only" checked onchange="calculatePrice()">
+                                    <div class="p-4 border-2 rounded-lg hover:border-green-500 peer-checked:border-green-600 peer-checked:bg-green-50 transition">
+                                        <div class="font-bold text-lg">Kecil (Small)</div>
+                                        <div class="text-sm text-gray-500">± 5kg (1-2 Kantong Kresek)</div>
+                                        <div class="mt-2 text-xs font-semibold text-blue-600">Harga Normal (x1)</div>
                                     </div>
                                 </label>
-                            @endforeach
-                        </div>
 
-                        @error('service_type_id')
-                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
-                        @enderror
+                                <label class="cursor-pointer relative">
+                                    <input type="radio" name="waste_size" value="medium" class="peer sr-only" onchange="calculatePrice()">
+                                    <div class="p-4 border-2 rounded-lg hover:border-green-500 peer-checked:border-green-600 peer-checked:bg-green-50 transition">
+                                        <div class="font-bold text-lg">Sedang (Medium)</div>
+                                        <div class="text-sm text-gray-500">± 20kg (1 Tong Sampah/Karung)</div>
+                                        <div class="mt-2 text-xs font-semibold text-blue-600">Harga x 2.5</div>
+                                    </div>
+                                </label>
 
-                        <div class="flex justify-end mt-6">
-                            <x-button type="button" @click="nextStep()" x-bind:disabled="!serviceTypeId">
-                                Continue
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </x-button>
-                        </div>
-                    </x-card>
-                </div>
-
-                <!-- Step 2: Schedule -->
-                <div x-show="step === 2" x-transition>
-                    <x-card>
-                        <h2 class="text-lg font-semibold text-gray-900 mb-6">Schedule Your Pickup</h2>
-
-                        <div class="space-y-6">
-                            <!-- Date -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Pickup Date</label>
-                                <input type="date" name="scheduled_date" x-model="scheduledDate"
-                                       min="{{ now()->addDay()->format('Y-m-d') }}"
-                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-eco-500 focus:ring-2 focus:ring-eco-200"
-                                       required>
-                                @error('scheduled_date')
-                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                                @enderror
+                                <label class="cursor-pointer relative">
+                                    <input type="radio" name="waste_size" value="large" class="peer sr-only" onchange="calculatePrice()">
+                                    <div class="p-4 border-2 rounded-lg hover:border-green-500 peer-checked:border-green-600 peer-checked:bg-green-50 transition">
+                                        <div class="font-bold text-lg">Besar (Large)</div>
+                                        <div class="text-sm text-gray-500">± 50kg (Pickup Truck Load)</div>
+                                        <div class="mt-2 text-xs font-semibold text-blue-600">Harga x 5</div>
+                                    </div>
+                                </label>
                             </div>
+                        </div>
 
-                            <!-- Time Window -->
+                        <div>
+                            <label for="service_type_id" class="block text-sm font-medium text-gray-700 mb-2">2. Jenis Sampah</label>
+                            <select name="service_type_id" id="service_type_id" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500" onchange="calculatePrice()">
+                                @foreach(\App\Models\ServiceType::where('is_active', true)->get() as $type)
+                                    <option value="{{ $type->id }}" data-price="{{ $type->base_price }}">
+                                        {{ $type->name }} - Rp {{ number_format($type->base_price, 0, ',', '.') }} / Paket Kecil
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-lg flex justify-between items-center border border-gray-200">
+                            <div>
+                                <span class="block text-sm text-gray-500">Estimasi Total Biaya</span>
+                                <span class="text-xs text-gray-400">*Harga dapat berubah sesuai berat aktual</span>
+                            </div>
+                            <span class="text-3xl font-bold text-green-600" id="display_price">Rp 0</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Tanggal Penjemputan</label>
+                                <input type="date" name="scheduled_date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500" required>
+                            </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">From Time</label>
-                                    <select name="scheduled_time_start" x-model="timeStart"
-                                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-eco-500 focus:ring-eco-200" required>
-                                        <option value="">Select time</option>
-                                        <option value="06:00">6:00 AM</option>
-                                        <option value="07:00">7:00 AM</option>
-                                        <option value="08:00">8:00 AM</option>
-                                        <option value="09:00">9:00 AM</option>
-                                        <option value="10:00">10:00 AM</option>
-                                        <option value="11:00">11:00 AM</option>
-                                        <option value="12:00">12:00 PM</option>
-                                        <option value="13:00">1:00 PM</option>
-                                        <option value="14:00">2:00 PM</option>
-                                        <option value="15:00">3:00 PM</option>
-                                        <option value="16:00">4:00 PM</option>
-                                    </select>
+                                    <label class="block text-sm font-medium text-gray-700">Jam Mulai</label>
+                                    <input type="time" name="scheduled_time_start" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">To Time</label>
-                                    <select name="scheduled_time_end" x-model="timeEnd"
-                                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-eco-500 focus:ring-eco-200" required>
-                                        <option value="">Select time</option>
-                                        <option value="08:00">8:00 AM</option>
-                                        <option value="09:00">9:00 AM</option>
-                                        <option value="10:00">10:00 AM</option>
-                                        <option value="11:00">11:00 AM</option>
-                                        <option value="12:00">12:00 PM</option>
-                                        <option value="13:00">1:00 PM</option>
-                                        <option value="14:00">2:00 PM</option>
-                                        <option value="15:00">3:00 PM</option>
-                                        <option value="16:00">4:00 PM</option>
-                                        <option value="17:00">5:00 PM</option>
-                                        <option value="18:00">6:00 PM</option>
-                                    </select>
+                                    <label class="block text-sm font-medium text-gray-700">Jam Selesai</label>
+                                    <input type="time" name="scheduled_time_end" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                                 </div>
                             </div>
-
-                            <!-- Address -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Pickup Address</label>
-                                <textarea name="service_address" x-model="serviceAddress" rows="3"
-                                          class="w-full px-4 py-3 rounded-xl border border-gray-200 focus: border-eco-500 focus: ring-2 focus:ring-eco-200"
-                                          placeholder="Enter full address including street, city, and postal code"
-                                          required>{{ old('service_address', auth()->user()->address) }}</textarea>
-                                @error('service_address')
-                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Notes -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Special Instructions (Optional)</label>
-                                <textarea name="notes" x-model="notes" rows="2"
-                                          class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-eco-500 focus:ring-2 focus:ring-eco-200"
-                                          placeholder="Gate code, specific location, etc. "></textarea>
-                            </div>
                         </div>
 
-                        <div class="flex justify-between mt-6">
-                            <x-button type="button" variant="secondary" @click="prevStep()">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                                Back
-                            </x-button>
-                            <x-button type="button" @click="nextStep()">
-                                Continue
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </x-button>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Alamat Lengkap</label>
+                            <textarea name="service_address" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500" required placeholder="Jalan Mawar No. 123, Kecamatan..."></textarea>
                         </div>
-                    </x-card>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Catatan Tambahan</label>
+                            <textarea name="notes" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Contoh: Pagar hitam, bel rusak..."></textarea>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700 shadow-lg transition transform hover:scale-105">
+                                Buat Pesanan & Bayar
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
-
-                <!-- Step 3: Confirm -->
-                <div x-show="step === 3" x-transition>
-                    <x-card>
-                        <h2 class="text-lg font-semibold text-gray-900 mb-6">Confirm Your Booking</h2>
-
-                        <div class="bg-gray-50 rounded-xl p-6 space-y-4">
-                            <div class="flex justify-between items-center pb-4 border-b border-gray-200">
-                                <span class="text-gray-600">Service Type</span>
-                                <span class="font-semibold text-gray-900" x-text="selectedServiceType?. name || '-'"></span>
-                            </div>
-                            <div class="flex justify-between items-center pb-4 border-b border-gray-200">
-                                <span class="text-gray-600">Pickup Date</span>
-                                <span class="font-semibold text-gray-900" x-text="formatDate(scheduledDate)"></span>
-                            </div>
-                            <div class="flex justify-between items-center pb-4 border-b border-gray-200">
-                                <span class="text-gray-600">Time Window</span>
-                                <span class="font-semibold text-gray-900" x-text="formatTimeWindow()"></span>
-                            </div>
-                            <div class="flex justify-between items-start pb-4 border-b border-gray-200">
-                                <span class="text-gray-600">Address</span>
-                                <span class="font-semibold text-gray-900 text-right max-w-xs" x-text="serviceAddress"></span>
-                            </div>
-                            <div x-show="notes" class="flex justify-between items-start pb-4 border-b border-gray-200">
-                                <span class="text-gray-600">Notes</span>
-                                <span class="text-gray-900 text-right max-w-xs" x-text="notes"></span>
-                            </div>
-                            <div class="flex justify-between items-center pt-2">
-                                <span class="text-lg font-semibold text-gray-900">Total Amount</span>
-                                <span class="text-2xl font-bold text-eco-600" x-text="'$' + (selectedServiceType?.base_price || 0).toFixed(2)"></span>
-                            </div>
-                        </div>
-
-                        <div class="mt-6 p-4 bg-eco-50 rounded-xl">
-                            <div class="flex items-start space-x-3">
-                                <svg class="w-5 h-5 text-eco-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <p class="text-sm text-eco-800">
-                                    By proceeding, you agree to our terms of service.  You will be redirected to complete payment after confirmation.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between mt-6">
-                            <x-button type="button" variant="secondary" @click="prevStep()">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                                Back
-                            </x-button>
-                            <x-button type="submit">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Confirm & Proceed to Payment
-                            </x-button>
-                        </div>
-                    </x-card>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
     <script>
-        function collectionForm() {
-            return {
-                step: 1,
-                serviceTypeId: '',
-                selectedServiceType: null,
-                scheduledDate: '',
-                timeStart: '08:00',
-                timeEnd:  '12:00',
-                serviceAddress:  '{{ old("service_address", auth()->user()->address ??  "") }}',
-                notes: '',
-
-                selectServiceType(type) {
-                    this.selectedServiceType = type;
-                },
-
-                nextStep() {
-                    if (this.step === 1 && !this.serviceTypeId) return;
-                    if (this.step === 2 && (! this.scheduledDate || !this.timeStart || !this.timeEnd || !this.serviceAddress)) return;
-                    this.step++;
-                },
-
-                prevStep() {
-                    this.step--;
-                },
-
-                formatDate(date) {
-                    if (!date) return '-';
-                    return new Date(date).toLocaleDateString('en-US', { 
-                        weekday: 'long', 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day:  'numeric' 
-                    });
-                },
-
-                formatTimeWindow() {
-                    const formatTime = (time) => {
-                        const [hours, minutes] = time.split(':');
-                        const h = parseInt(hours);
-                        const ampm = h >= 12 ?  'PM' : 'AM';
-                        const h12 = h % 12 || 12;
-                        return `${h12}:${minutes} ${ampm}`;
-                    };
-                    return `${formatTime(this.timeStart)} - ${formatTime(this. timeEnd)}`;
-                }
-            }
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(number);
         }
+
+        function calculatePrice() {
+            // 1. Ambil Multiplier Ukuran
+            let sizeElement = document.querySelector('input[name="waste_size"]:checked');
+            let size = sizeElement ? sizeElement.value : 'small';
+
+            let multiplier = 1;
+            if (size === 'medium') multiplier = 2.5;
+            if (size === 'large') multiplier = 5;
+
+            // 2. Ambil Base Price dari Dropdown
+            let select = document.getElementById('service_type_id');
+            let selectedOption = select.options[select.selectedIndex];
+            let basePrice = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+
+            // 3. Logika Khusus Bulk Items (Barang Besar)
+            // Jika user memilih "Barang Besar", multiplier ukuran mungkin tidak berlaku atau berbeda
+            // Kita bisa cek text option-nya atau ID-nya.
+            // Disini kita asumsi sederhana dulu:
+
+            let total = basePrice * multiplier;
+
+            // 4. Tampilkan Format Rupiah
+            document.getElementById('display_price').innerText = formatRupiah(total);
+        }
+
+        // Jalankan saat load
+        document.addEventListener('DOMContentLoaded', calculatePrice);
     </script>
 </x-app-layout>

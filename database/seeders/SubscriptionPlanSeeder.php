@@ -10,156 +10,145 @@ class SubscriptionPlanSeeder extends Seeder
 {
     public function run(): void
     {
+        // Ambil semua service type, key-nya pakai slug biar gampang dipanggil
         $serviceTypes = ServiceType::all()->keyBy('slug');
 
-        // General Waste Plans
-        $this->createPlansForService($serviceTypes['general-waste'], [
-            [
-                'name' => 'Basic Weekly',
-                'slug' => 'general-basic-weekly',
-                'frequency_per_week' => 1,
-                'monthly_price' => 49.99,
-                'per_pickup_price' => 12.50,
-                'discount_percentage' => 17,
-                'description' => 'Perfect for small households',
-                'features' => [
-                    'Once weekly pickup',
-                    'Up to 2 bags per pickup',
-                    'Email notifications',
-                    'Flexible scheduling',
+        // 1. Paket Sampah Umum (General Waste)
+        // Pastikan slug 'sampah-umum' sesuai dengan ServiceTypeSeeder sebelumnya
+        if (isset($serviceTypes['sampah-umum'])) {
+            $this->createPlansForService($serviceTypes['sampah-umum'], [
+                [
+                    'name' => 'Basic Mingguan',
+                    'slug' => 'sampah-mingguan',
+                    'frequency_per_week' => 1,
+                    'monthly_price' => 50000, // Rp 50.000 per bulan
+                    'per_pickup_price' => 12500, // Jatuhnya Rp 12.500/jemput
+                    'discount_percentage' => 17,
+                    'description' => 'Cocok untuk rumah tangga kecil.',
+                    'features' => json_encode([
+                        'Jemput 1x seminggu',
+                        'Maksimal 2 kantong per jemput',
+                        'Notifikasi email',
+                        'Jadwal fleksibel',
+                    ]),
+                    'is_popular' => false,
                 ],
-                'is_popular' => false,
-            ],
-            [
-                'name' => 'Standard Twice Weekly',
-                'slug' => 'general-standard',
-                'frequency_per_week' => 2,
-                'monthly_price' => 89.99,
-                'per_pickup_price' => 11.25,
-                'discount_percentage' => 25,
-                'description' => 'Most popular for families',
-                'features' => [
-                    'Twice weekly pickup',
-                    'Up to 3 bags per pickup',
-                    'Email & SMS notifications',
-                    'Priority scheduling',
-                    'Free rescheduling',
+                [
+                    'name' => 'Standar (2x Seminggu)',
+                    'slug' => 'sampah-standard',
+                    'frequency_per_week' => 2,
+                    'monthly_price' => 90000, // Rp 90.000 per bulan
+                    'per_pickup_price' => 11250,
+                    'discount_percentage' => 25,
+                    'description' => 'Paling populer untuk keluarga.',
+                    'features' => json_encode([
+                        'Jemput 2x seminggu',
+                        'Maksimal 3 kantong per jemput',
+                        'Notifikasi WA & Email',
+                        'Prioritas penjemputan',
+                        'Bebas atur ulang jadwal',
+                    ]),
+                    'is_popular' => true,
                 ],
-                'is_popular' => true,
-            ],
-            [
-                'name' => 'Premium Daily',
-                'slug' => 'general-premium',
-                'frequency_per_week' => 5,
-                'monthly_price' => 179.99,
-                'per_pickup_price' => 9.00,
-                'discount_percentage' => 40,
-                'description' => 'For businesses and large households',
-                'features' => [
-                    'Monday to Friday pickup',
-                    'Unlimited bags',
-                    'Priority support',
-                    'Dedicated driver',
-                    'Real-time tracking',
+                [
+                    'name' => 'Premium Harian',
+                    'slug' => 'sampah-premium',
+                    'frequency_per_week' => 5, // Senin - Jumat
+                    'monthly_price' => 200000, // Rp 200.000 per bulan
+                    'per_pickup_price' => 10000,
+                    'discount_percentage' => 40,
+                    'description' => 'Untuk bisnis atau rumah tangga besar.',
+                    'features' => json_encode([
+                        'Jemput Senin - Jumat',
+                        'Tanpa batas jumlah kantong',
+                        'Layanan Pelanggan Prioritas',
+                        'Driver khusus langganan',
+                        'Tracking Real-time',
+                    ]),
+                    'is_popular' => false,
                 ],
-                'is_popular' => false,
-            ],
-        ]);
+            ]);
+        }
 
-        // Recyclables Plans
-        $this->createPlansForService($serviceTypes['recyclables'], [
-            [
-                'name' => 'Eco Weekly',
-                'slug' => 'recycle-weekly',
-                'frequency_per_week' => 1,
-                'monthly_price' => 39.99,
-                'per_pickup_price' => 10.00,
-                'discount_percentage' => 17,
-                'description' => 'Start your recycling journey',
-                'features' => [
-                    'Once weekly pickup',
-                    'Free recycling bins',
-                    'Sorting guide included',
+        // 2. Paket Daur Ulang (Recyclables)
+        if (isset($serviceTypes['recyclables'])) {
+            $this->createPlansForService($serviceTypes['recyclables'], [
+                [
+                    'name' => 'Eco Mingguan',
+                    'slug' => 'recycle-mingguan',
+                    'frequency_per_week' => 1,
+                    'monthly_price' => 35000, // Rp 35.000
+                    'per_pickup_price' => 8750,
+                    'discount_percentage' => 17,
+                    'description' => 'Mulai kebiasaan daur ulangmu.',
+                    'features' => json_encode([
+                        'Jemput 1x seminggu',
+                        'Gratis karung daur ulang',
+                        'Panduan pemilahan sampah',
+                    ]),
+                    'is_popular' => false,
                 ],
-                'is_popular' => false,
-            ],
-            [
-                'name' => 'Green Bi-Weekly',
-                'slug' => 'recycle-biweekly',
-                'frequency_per_week' => 2,
-                'monthly_price' => 69.99,
-                'per_pickup_price' => 8.75,
-                'discount_percentage' => 27,
-                'description' => 'Best for eco-conscious families',
-                'features' => [
-                    'Twice weekly pickup',
-                    'Multiple recycling bins',
-                    'Monthly impact report',
-                    'Priority scheduling',
+                [
+                    'name' => 'Green Pro (2x Seminggu)',
+                    'slug' => 'recycle-biweekly',
+                    'frequency_per_week' => 2,
+                    'monthly_price' => 60000, // Rp 60.000
+                    'per_pickup_price' => 7500,
+                    'discount_percentage' => 27,
+                    'description' => 'Terbaik untuk pecinta lingkungan.',
+                    'features' => json_encode([
+                        'Jemput 2x seminggu',
+                        'Bin daur ulang multiple',
+                        'Laporan dampak lingkungan bulanan',
+                        'Jadwal prioritas',
+                    ]),
+                    'is_popular' => true,
                 ],
-                'is_popular' => true,
-            ],
-        ]);
+            ]);
+        }
 
-        // Organic Waste Plans
-        $this->createPlansForService($serviceTypes['organic-waste'], [
-            [
-                'name' => 'Compost Weekly',
-                'slug' => 'organic-weekly',
-                'frequency_per_week' => 1,
-                'monthly_price' => 34.99,
-                'per_pickup_price' => 8.75,
-                'discount_percentage' => 12,
-                'description' => 'Weekly composting service',
-                'features' => [
-                    'Once weekly pickup',
-                    'Free compost bin',
-                    'Compostable bags included',
+        // 3. Paket Organik (Organic Waste)
+        if (isset($serviceTypes['organic-waste'])) {
+            $this->createPlansForService($serviceTypes['organic-waste'], [
+                [
+                    'name' => 'Kompos Mingguan',
+                    'slug' => 'organik-mingguan',
+                    'frequency_per_week' => 1,
+                    'monthly_price' => 40000, // Rp 40.000
+                    'per_pickup_price' => 10000,
+                    'discount_percentage' => 12,
+                    'description' => 'Layanan kompos mingguan.',
+                    'features' => json_encode([
+                        'Jemput 1x seminggu',
+                        'Gratis wadah kompos',
+                        'Termasuk kantong biodegradable',
+                    ]),
+                    'is_popular' => false,
                 ],
-                'is_popular' => false,
-            ],
-            [
-                'name' => 'Garden Pro',
-                'slug' => 'organic-pro',
-                'frequency_per_week' => 2,
-                'monthly_price' => 59.99,
-                'per_pickup_price' => 7.50,
-                'discount_percentage' => 25,
-                'description' => 'For gardens and kitchens',
-                'features' => [
-                    'Twice weekly pickup',
-                    'Premium compost bin',
-                    'Free compost return',
-                    'Gardening tips newsletter',
+                [
+                    'name' => 'Garden Pro',
+                    'slug' => 'organik-pro',
+                    'frequency_per_week' => 2,
+                    'monthly_price' => 75000, // Rp 75.000
+                    'per_pickup_price' => 9375,
+                    'discount_percentage' => 25,
+                    'description' => 'Untuk yang punya taman & dapur aktif.',
+                    'features' => json_encode([
+                        'Jemput 2x seminggu',
+                        'Wadah kompos premium',
+                        'Gratis pupuk kompos balikan',
+                        'Newsletter tips berkebun',
+                    ]),
+                    'is_popular' => true,
                 ],
-                'is_popular' => true,
-            ],
-            [
-                'name' => 'Farm Fresh',
-                'slug' => 'organic-farm',
-                'frequency_per_week' => 3,
-                'monthly_price' => 79.99,
-                'per_pickup_price' => 6.67,
-                'discount_percentage' => 33,
-                'description' => 'High-volume organic waste',
-                'features' => [
-                    'Three times weekly pickup',
-                    'Large capacity bins',
-                    'Free compost delivery',
-                    'Priority scheduling',
-                ],
-                'is_popular' => false,
-            ],
-        ]);
-
-        // Bulk Items - No subscription, one-time only
-        // Hazardous Waste - No subscription, one-time only
+            ]);
+        }
     }
 
     private function createPlansForService(ServiceType $serviceType, array $plans): void
     {
         foreach ($plans as $plan) {
-            SubscriptionPlan:: create(array_merge($plan, [
+            SubscriptionPlan::create(array_merge($plan, [
                 'service_type_id' => $serviceType->id,
                 'is_active' => true,
             ]));

@@ -11,6 +11,8 @@ class Collection extends Model
 
     protected $fillable = [
         'user_id',
+        'waste_size',
+        'estimated_weight',
         'subscription_id',
         'service_type_id',
         'driver_id',
@@ -142,7 +144,7 @@ class Collection extends Model
     // Get time window string
     public function getTimeWindowAttribute(): string
     {
-        return $this->scheduled_time_start->format('g:i A') . ' - ' . 
+        return $this->scheduled_time_start->format('g:i A') . ' - ' .
                $this->scheduled_time_end->format('g:i A');
     }
 }
