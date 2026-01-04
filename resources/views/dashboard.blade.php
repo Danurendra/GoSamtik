@@ -20,8 +20,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Stats Grid -->
             <div class="grid grid-cols-1 md: grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <x-stat-card 
-                    title="Total Collections" 
+                <x-stat-card
+                    title="Total Collections"
                     : value="$stats['total_collections']"
                     trend="positive"
                     trend-value="+12%"
@@ -33,8 +33,8 @@
                     </x-slot>
                 </x-stat-card>
 
-                <x-stat-card 
-                    title="Active Subscriptions" 
+                <x-stat-card
+                    title="Active Subscriptions"
                     :value="$stats['active_subscriptions']"
                 >
                     <x-slot name="icon">
@@ -44,8 +44,8 @@
                     </x-slot>
                 </x-stat-card>
 
-                <x-stat-card 
-                    title="Pending Pickups" 
+                <x-stat-card
+                    title="Pending Pickups"
                     :value="$stats['pending_collections']"
                 >
                     <x-slot name="icon">
@@ -55,8 +55,8 @@
                     </x-slot>
                 </x-stat-card>
 
-                <x-stat-card 
-                    title="Total Spent" 
+                <x-stat-card
+                    title="Total Spent"
                     : value="'$' . number_format($stats['total_spent'], 2)"
                 >
                     <x-slot name="icon">
@@ -96,7 +96,7 @@
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-3">
-                                            <x-badge : color="$collection->status_color">
+                                            <x-badge :color="$collection->status_color">
                                                 {{ ucfirst($collection->status) }}
                                             </x-badge>
                                             <a href="{{ route('collections.show', $collection) }}" class="p-2 text-gray-400 hover:text-eco-600 transition-colors">

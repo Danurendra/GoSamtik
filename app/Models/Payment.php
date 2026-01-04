@@ -19,11 +19,12 @@ class Payment extends Model
         'discount_amount',
         'total_amount',
         'payment_method',
-        'status',
+        'payment_status',
         'transaction_id',
+        'snap_token',
         'gateway_reference',
-        'gateway_response',
-        'paid_at',
+        'midtrans_response',
+        'payment_date',
     ];
 
     protected $casts = [
@@ -31,8 +32,8 @@ class Payment extends Model
         'tax_amount' => 'decimal:2',
         'discount_amount' => 'decimal:2',
         'total_amount' => 'decimal: 2',
-        'gateway_response' => 'array',
-        'paid_at' => 'datetime',
+        'midtrans_response' => 'array',
+        'payment_date' => 'datetime',
     ];
 
     // Relationships
@@ -59,7 +60,7 @@ class Payment extends Model
     // Scopes
     public function scopeCompleted($query)
     {
-        return $query->where('status', 'completed');
+        return $query->where('payment_status', 'completed');
     }
 
     public function scopePending($query)

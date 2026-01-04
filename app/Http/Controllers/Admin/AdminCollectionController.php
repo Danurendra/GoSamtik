@@ -86,6 +86,21 @@ class AdminCollectionController extends Controller
         ));
     }
 
+    public function verifyPayment(Collection $collection)
+    {
+        // Update status di tabel Collections
+        $collection->update(['payment_status' => 'paid']);
+
+        // Update status di tabel Payments (jika ada relasinya)
+        if ($collection->payment) {
+            $collection->payment->update([
+                'payment_status' => 'success', // atau 'completed' sesuai enum db
+                'payment_date'   => now(),
+            ]);
+        }
+
+        return back()->with('success', 'Pembayaran berhasil diverifikasi manual!');
+    }
     /**
      * Display a specific collection
      */

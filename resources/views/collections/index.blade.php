@@ -58,7 +58,7 @@
             @if($collections->count() > 0)
                 <div class="space-y-4">
                     @foreach($collections as $collection)
-                        <x-card hover class="cursor-pointer" onclick="window.location='{{ route('collections. show', $collection) }}'">
+                        <x-card hover class="cursor-pointer" onclick="window.location='{{ route('collections.show', $collection) }}'">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-4">
                                     <div class="w-14 h-14 rounded-xl flex items-center justify-center" style="background-color: {{ $collection->serviceType->color }}15">
@@ -69,7 +69,7 @@
                                     <div>
                                         <div class="flex items-center space-x-2">
                                             <h3 class="font-semibold text-gray-900">{{ $collection->serviceType->name }}</h3>
-                                            <x-badge : color="$collection->status_color">
+                                            <x-badge :color="$collection->status_color">
                                                 {{ ucfirst(str_replace('_', ' ', $collection->status)) }}
                                             </x-badge>
                                         </div>

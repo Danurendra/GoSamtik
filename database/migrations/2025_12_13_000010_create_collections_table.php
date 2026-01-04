@@ -19,12 +19,12 @@ return new class extends Migration
             $table->time('scheduled_time_start');
             $table->time('scheduled_time_end');
             $table->enum('status', ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled', 'missed'])->default('pending');
-            $table->text('service_address');
+            $table->text('service_address')->nullable();
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->text('notes')->nullable();
             $table->text('special_instructions')->nullable();
-            $table->decimal('total_amount', 10, 2);
+            $table->decimal('total_amount', 12, 2)->default(0);
             $table->string('completion_photo')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->text('driver_notes')->nullable();

@@ -10,7 +10,7 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
+
             <!-- Stats -->
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
                 <x-card class="text-center">
@@ -165,15 +165,33 @@
                                             @if($collection->driver)
                                                 <span class="text-sm text-gray-900">{{ $collection->driver->user->name }}</span>
                                             @else
-                                                <button type="button" 
+                                                <button type="button"
                                                         onclick="openAssignModal({{ $collection->id }})"
                                                         class="text-sm text-yellow-600 hover:text-yellow-700 font-medium">
                                                     + Assign
                                                 </button>
                                             @endif
                                         </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if($collection->payment_status == 'paid')
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                    LUNAS
+                                                </span>
+                                            @else
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                    BELUM BAYAR
+                                                </span>
+
+                                                <form action="{{ route('admin.collections.verify_payment', $collection->id) }}" method="POST" class="inline-block ml-2" onsubmit="return confirm('Yakin ingin verifikasi pembayaran ini?');">
+                                                    @csrf
+                                                    <button type="submit" class="text-blue-600 hover:text-blue-900 text-xs underline">
+                                                        Verifikasi Manual
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </td>
                                         <td class="py-4">
-                                            <x-badge : color="$collection->status_color">
+                                            <x-badge :color="$collection->status_color">
                                                 {{ ucfirst(str_replace('_', ' ', $collection->status)) }}
                                             </x-badge>
                                         </td>
@@ -181,7 +199,7 @@
                                             <span class="font-medium text-gray-900">${{ number_format($collection->total_amount, 2) }}</span>
                                         </td>
                                         <td class="py-4 text-right">
-                                            <a href="{{ route('admin.collections. show', $collection) }}" 
+                                            <a href="{{ route('admin.collections. show', $collection) }}"
                                                class="text-eco-600 hover:text-eco-700 font-medium text-sm">
                                                 View
                                             </a>

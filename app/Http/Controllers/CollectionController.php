@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Collection;
 use App\Models\ServiceType;
+use App\Models\Payment;
 use App\Models\Holiday;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,158 +13,108 @@ class CollectionController extends Controller
 {
     public function index(Request $request)
     {
+        // 1. Ambil data Collections (Order User)
         $collections = Collection::where('user_id', $request->user()->id)
-            ->with(['serviceType', 'driver. user'])
+            ->with(['serviceType', 'driver.user', 'payment'])
             ->when($request->status, fn($q, $status) => $q->where('status', $status))
-            ->when($request->service_type, fn($q, $type) => $q->where('service_type_id', $type))
-            ->orderByDesc('scheduled_date')
+            ->when($request->service_type, fn($q, $type) => $q->where('service_type_id', $type)) // Filter berdasarkan tipe
+            ->orderByDesc('created_at') // Atau 'scheduled_date'
             ->paginate(10);
 
-        $serviceTypes = ServiceType::active()->ordered()->get();
+        // 2. Ambil data Service Types (INI YANG HILANG SEBELUMNYA)
+        // Menggunakan where('is_active', true) agar aman jika scope active() belum dibuat di model
+        $serviceTypes = ServiceType::where('is_active', true)->get();
 
+        // 3. Kirim kedua variable ke View
         return view('collections.index', compact('collections', 'serviceTypes'));
     }
 
     public function create()
     {
-        $serviceTypes = ServiceType::active()->ordered()->get();
-
+        $serviceTypes = ServiceType::where('is_active', true)->orderBy('sort_order')->get();
         return view('collections.create', compact('serviceTypes'));
     }
 
     public function store(Request $request)
     {
+        // 1. Validasi Input
         $validated = $request->validate([
             'service_type_id' => 'required|exists:service_types,id',
-            // HAPUS SPASI setelah titik dua
-            'waste_size' => 'required',
+            'waste_size' => 'required|in:small,medium,large',
             'scheduled_date' => 'required|date|after_or_equal:today',
             'scheduled_time_start' => 'required',
             'scheduled_time_end' => 'required',
             'service_address' => 'required|string|max:500',
             'notes' => 'nullable|string|max:1000',
-            // Tambahan: Terima koordinat jika ada (biar driver tau lokasi tepatnya)
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
         ]);
 
-        // Cek Hari Libur
-        // Pastikan model Holiday punya method static isHoliday()
-        // Jika belum ada, bisa pakai: Holiday::whereDate('date', $validated['scheduled_date'])->exists()
-        if (Holiday::whereDate('date', $validated['scheduled_date'])->exists()) {
-            return back()
-                ->withInput() // Biar inputan user nggak hilang
-                ->withErrors(['scheduled_date' => 'Maaf, tanggal tersebut adalah hari libur layanan kami.']);
-        }
+        // 2. Cek Hari Libur
+//        if (Holiday::whereDate('holiday_date', $validated['scheduled_date'])->exists()) {
+//            return back()->withInput()->withErrors(['scheduled_date' => 'Maaf, tanggal tersebut adalah hari libur.']);
+//        }
 
+        // 3. Hitung Harga (Server Side)
         $serviceType = ServiceType::findOrFail($validated['service_type_id']);
 
-        //Logic Hitung Harga Berdasarkan Ukuran
-        $multiplier = 1;
-        $weight = 5; // Default kg
-
-        switch ($request->waste_size) {
-            case 'small':
-                $multiplier = 1;
-                $weight = 5;
-                break;
-            case 'medium':
-                $multiplier = 2.5; // Lebih mahal 2.5x
-                $weight = 20;
-                break;
-            case 'large':
-                $multiplier = 5; // Lebih mahal 5x
-                $weight = 50;
-                break;
-        }
-
-        // Jika tipe sampahnya "Bulk Items" (Furniture), mungkin ada biaya tambahan fix
-        if ($serviceType->slug === 'bulk-items') {
-            $multiplier = 1; // Reset multiplier, pakai harga flat mahal
-            $weight = 100;   // Berat asumsi
-        }
+        $multiplier = match ($request->waste_size) {
+            'medium' => 2.5,
+            'large' => 5.0,
+            default => 1.0, // small
+        };
 
         $finalPrice = $serviceType->base_price * $multiplier;
 
-        // 2. Simpan Data
-        // Kita gunakan DB Transaction biar kalau error di tengah jalan, data nggak nyangkut
-        $collection = DB::transaction(function () use ($request, $validated,
-            $serviceType, $weight, $finalPrice) {
-            return Collection::create([
-                'user_id' => $request->user()->id,
+        // 4. Simpan ke Database (Transaction)
+        $collection = DB::transaction(function () use ($request, $validated, $serviceType, $finalPrice) {
+
+            // A. Buat Data Collection (Order)
+            // PENTING: Semua field wajib harus diisi disini
+            $newCollection = Collection::create([
+                'user_id' => $request->user()->id, // <-- Ini yang tadi error (1364)
                 'service_type_id' => $validated['service_type_id'],
                 'waste_size' => $request->waste_size,
-                'estimated_weight' => $weight,
-                'collection_type' => 'one_time',
+
+                // Perhatikan nama kolom di DB Anda (apakah 'collection_date' atau 'scheduled_date'?)
+                // Berdasarkan migration Anda, sepertinya 'collection_date'
                 'scheduled_date' => $validated['scheduled_date'],
+                'time_slot_start' => $validated['scheduled_time_start'],
+                'time_slot_end' => $validated['scheduled_time_end'],
                 'scheduled_time_start' => $validated['scheduled_time_start'],
                 'scheduled_time_end' => $validated['scheduled_time_end'],
                 'service_address' => $validated['service_address'],
-                'latitude' => $request->latitude ?? null,   // Masukkan koordinat
-                'longitude' => $request->longitude ?? null, // Masukkan koordinat
                 'notes' => $validated['notes'] ?? null,
-                'total_amount' => $serviceType->base_price, // Pastikan kolom base_price ada di tabel service_types
+                'total_amount' => $finalPrice,
                 'status' => 'pending',
+                'payment_status' => 'unpaid',
             ]);
+
+            // B. Buat Data Payment (Manual Transfer)
+            Payment::create([
+                'collection_id' => $newCollection->id,
+                'user_id'       => $request->user()->id,
+                'total_amount'  => $finalPrice,
+                'payment_type'  => 'one_time',
+                'payment_method'=> 'manual_transfer', // Kita set manual dulu
+                'payment_status'=> 'pending',
+                'transaction_id'=> 'MANUAL-' . $newCollection->id . '-' . time(),
+            ]);
+
+            return $newCollection;
         });
 
-        // 3. Redirect ke Halaman Bayar
-        return redirect()->route('payments.checkout', $collection)
-            ->with('success', 'Jadwal penjemputan berhasil dibuat! Silakan selesaikan pembayaran.');
+        // 5. Redirect ke Detail Order (Bukan Checkout Midtrans)
+        return redirect()->route('collections.show', $collection)
+            ->with('success', 'Pesanan berhasil dibuat! Silakan lakukan pembayaran manual.');
     }
 
     public function show(Collection $collection)
     {
-        $this->authorize('view', $collection);
+        // Pastikan user cuma bisa lihat punya sendiri
+        if ($collection->user_id !== auth()->id()) {
+            abort(403);
+        }
 
-        $collection->load(['serviceType', 'driver.user', 'rating', 'payment']);
-
+        $collection->load(['serviceType', 'driver', 'payment']);
         return view('collections.show', compact('collection'));
-    }
-
-    public function cancel(Request $request, Collection $collection)
-    {
-        $this->authorize('update', $collection);
-
-        if (! $collection->canBeCancelled()) {
-            return back()->with('error', 'This collection cannot be cancelled.');
-        }
-
-        $validated = $request->validate([
-            'cancellation_reason' => 'required|string|max:500',
-        ]);
-
-        $collection->update([
-            'status' => 'cancelled',
-            'cancellation_reason' => $validated['cancellation_reason'],
-        ]);
-
-        // TODO: Process refund if payment was made
-
-        return redirect()->route('collections.index')
-            ->with('success', 'Collection cancelled successfully.');
-    }
-
-    public function reschedule(Request $request, Collection $collection)
-    {
-        $this->authorize('update', $collection);
-
-        if (!$collection->canBeCancelled()) {
-            return back()->with('error', 'This collection cannot be rescheduled.');
-        }
-
-        $validated = $request->validate([
-            'scheduled_date' => 'required|date|after:today',
-            'scheduled_time_start' => 'required|date_format:H:i',
-            'scheduled_time_end' => 'required|date_format:H:i|after:scheduled_time_start',
-        ]);
-
-        if (Holiday::isHoliday($validated['scheduled_date'])) {
-            return back()->withErrors(['scheduled_date' => 'Selected date is a holiday. ']);
-        }
-
-        $collection->update($validated);
-
-        return back()->with('success', 'Collection rescheduled successfully.');
     }
 }

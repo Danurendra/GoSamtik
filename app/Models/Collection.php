@@ -31,6 +31,9 @@ class Collection extends Model
         'completed_at',
         'driver_notes',
         'cancellation_reason',
+        'payment_status',
+        'time_slot_start',
+        'time_slot_end'
     ];
 
     protected $casts = [
