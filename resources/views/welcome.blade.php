@@ -51,7 +51,7 @@
                         Professional <span class="text-eco-600">Waste Collection</span> Made Simple
                     </h1>
                     <p class="text-xl text-gray-600 mb-8">
-                        Schedule pickups, track collections in real-time, and help save the environment.  Join thousands of satisfied customers choosing EcoCollect.
+                        Schedule pickups, track collections in real-time, and help save the environment.  Join thousands of satisfied customers choosing Gosamtik.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4">
                         <a href="{{ route('register') }}" class="inline-flex items-center justify-center px-8 py-4 bg-eco-600 text-white font-semibold rounded-xl hover:bg-eco-700 transition-colors shadow-eco text-lg">
@@ -148,7 +148,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Get started with EcoCollect in just a few simple steps</p>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Get started with gosamtik in just a few simple steps</p>
             </div>
 
             <div class="grid grid-cols-1 md: grid-cols-4 gap-8">
@@ -205,7 +205,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                             </svg>
                         </div>
-                        <span class="text-xl font-bold text-white">EcoCollect</span>
+                        <span class="text-xl font-bold text-white">Gosamtik</span>
                     </div>
                     <p class="text-sm">Professional waste collection services for a cleaner, greener future.</p>
                 </div>
@@ -230,14 +230,14 @@
                 <div>
                     <h4 class="text-white font-semibold mb-4">Contact</h4>
                     <ul class="space-y-2 text-sm">
-                        <li>support@ecocollect.com</li>
+                        <li>support@gosamtik.com</li>
                         <li>+1 (555) 123-4567</li>
                         <li>123 Green Street, Eco City</li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-                <p>&copy; {{ date('Y') }} EcoCollect. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} Gosamtik. All rights reserved.</p>
             </div>
         </div>
     </footer>

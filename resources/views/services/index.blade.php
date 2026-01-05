@@ -108,7 +108,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">How It Works</h2>
-                    <p class="text-gray-500 max-w-2xl mx-auto">Getting started with EcoCollect is easy. Follow these simple steps to schedule your first pickup.</p>
+                    <p class="text-gray-500 max-w-2xl mx-auto">Getting started with Gosamtik is easy. Follow these simple steps to schedule your first pickup.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md: grid-cols-4 gap-8">
@@ -176,7 +176,7 @@
         <div class="bg-eco-600 py-16">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg: px-8 text-center">
                 <h2 class="text-3xl font-bold text-white mb-4">Ready to Get Started?</h2>
-                <p class="text-eco-100 mb-8 text-lg">Join thousands of satisfied customers who trust EcoCollect for their waste management needs.</p>
+                <p class="text-eco-100 mb-8 text-lg">Join thousands of satisfied customers who trust Gosamtik for their waste management needs.</p>
                 <div class="flex flex-col sm: flex-row gap-4 justify-center">
                     <a href="{{ route('collections.create') }}" class="inline-flex items-center justify-center px-8 py-3 bg-white text-eco-600 font-semibold rounded-xl hover:bg-eco-50 transition-colors shadow-lg">
                         Schedule a Pickup

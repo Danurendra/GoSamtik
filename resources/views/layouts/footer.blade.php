@@ -9,7 +9,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                         </svg>
                     </div>
-                    <span class="text-xl font-bold text-white">Eco<span class="text-eco-400">Collect</span></span>
+                    <span class="text-xl font-bold text-white">Go<span class="text-eco-400">SamtikCollect</span></span>
                 </div>
                 <p class="text-gray-400 max-w-md">
                     Making waste management simple, efficient, and environmentally friendly.  
@@ -49,7 +49,7 @@
         </div>
 
         <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
-            <p>&copy; {{ date('Y') }} EcoCollect. All rights reserved. </p>
+            <p>&copy; {{ date('Y') }} Gosamtik. All rights reserved. </p>
         </div>
     </div>
 </footer>
